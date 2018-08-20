@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cms.dao.UserDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.cms.entity.User" >
+	<result column="user_id" property="id"/>
+	<result column="user_name" property="userName"/>
+	<result column="pwd" property="pwd"/>
+	<result column="node_id" property="nodeId"/>
+	<result column="parent_node_id" property="parentNodeId"/>
+	<result column="birthday" property="birthday"/>
+	<!-- <result column="country_id" property="countryId"/> -->
+	<result column="create_time" property="createTime"/>
+	<result column="email" property="email"/>
+	<result column="enable" property="enable"/>
+	<result column="gender" property="gender"/>
+	<result column="last_login_time" property="lastLoginTime"/>
+	<result column="session_id" property="sessionId"/>
+	<result column="user_type" property="userType"/>
+</resultMap>
+
+<resultMap id="queryRoleForListMap" type="com.cms.entity.User">
+	<result column="user_id" property="id"/>
+	<result column="user_name" property="userName"/>
+	<result column="pwd" property="pwd"/>
+	<result column="node_id" property="nodeId"/>
+	<result column="parent_node_id" property="parentNodeId"/>
+	<result column="birthday" property="birthday"/>
+	<result column="create_time" property="createTime"/>
+	<result column="email" property="email"/>
+	<result column="enable" property="enable"/>
+	<result column="gender" property="gender"/>
+	<result column="last_login_time" property="lastLoginTime"/>
+	<result column="session_id" property="sessionId"/>
+	<result column="user_type" property="userType"/>
+	<!-- <result column="country_id" property="countryId"/> -->
+	<association property="country" javaType="com.cms.entity.Country">
+        <result column="country_id" property="id"/>
+        <result column="country_name" property="countryName"/>
+        <result column="country_eng_name" property="countryEngName"/>
+    </association>
+	<collection property="roleSet" javaType="java.util.Set" ofType="com.cms.entity.Role">
+		<result column="role_id" property="id"/>
+		<result column="role_name" property="roleName"/>
+		<collection property="menuSet" javaType="java.util.Set" ofType="com.cms.entity.Menu">
+			<result column="menu_id" property="id"/>
+			<result column="menu_name" property="menuName"/>
+			<result column="menu_type" property="menuType"/>
+			<result column="url" property="url"/>
+			<result column="parent_id" property="parentId"/>
+			<result column="display_seq" property="displaySeq"/>
+		</collection>
+	</collection>
+	<collection property="customerSet" javaType="java.util.Set" ofType="com.cms.entity.Customer">
+		<result column="customer_id" property="id"/>
+		<result column="customer_name" property="customerName"/>
+	</collection>
+</resultMap>
+
+<resultMap id="CustomerResultMap" type="com.cms.entity.Customer" >
+	<result column="customer_id" property="id"/>
+	<result column="customer_name" property="customerName"/>
+</resultMap>
+       
+<!-- Sys_User table all fields -->
+<sql id="Base_Column_List" >
+	 birthday,country_id,create_time,email,enable,gender,last_login_time,node_id,parent_node_id,pwd,session_id,user_id,user_name,user_type
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.birthday != null and condition.birthday != ''" >
+	    and birthday =  #{condition.birthday}
+	</if>
+	<if test="condition.countryId != null and condition.countryId != ''" >
+	    and country_id =  #{condition.countryId}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.email != null and condition.email != ''" >
+	    and email =  #{condition.email}
+	</if>
+	<if test="condition.enable != null and condition.enable != ''" >
+	    and enable =  #{condition.enable}
+	</if>
+	<if test="condition.gender != null and condition.gender != ''" >
+	    and gender =  #{condition.gender}
+	</if>
+	<if test="condition.lastLoginTime != null and condition.lastLoginTime != ''" >
+	    and last_login_time =  #{condition.lastLoginTime}
+	</if>
+	<if test="condition.nodeId != null and condition.nodeId != ''" >
+	    and node_id =  #{condition.nodeId}
+	</if>
+	<if test="condition.parentNodeId != null and condition.parentNodeId != ''" >
+	    and parent_node_id =  #{condition.parentNodeId}
+	</if>
+	<if test="condition.pwd != null and condition.pwd != ''" >
+	    and pwd =  #{condition.pwd}
+	</if>
+	<if test="condition.sessionId != null and condition.sessionId != ''" >
+	    and session_id =  #{condition.sessionId}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+	<if test="condition.userName != null and condition.userName != ''" >
+	    and user_name =  #{condition.userName}
+	</if>
+	<if test="condition.userType != null and condition.userType != ''" >
+	    and user_type =  #{condition.userType}
+	</if>
+</trim>
+</sql>
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+	insert into sys_user (
+	<trim  suffixOverrides="," >
+	<if test="birthday != null  ">
+  		birthday,
+	</if>
+	<if test="country != null  ">
+	  	country_id,
+	</if>
+	<if test="email != null  ">
+		email,
+	</if>
+	<if test="enable != null  ">
+		enable,
+	</if>
+	<if test="gender != null  ">
+		gender,
+	</if>
+	<if test="lastLoginTime != null  ">
+		last_login_time,
+	</if>
+	<if test="nodeId != null  ">
+		node_id,
+	</if>
+	<if test="parentNodeId != null  ">
+		parent_node_id,
+	</if>
+	<if test="pwd != null  ">
+		pwd,
+	</if>
+	<if test="sessionId != null  ">
+		session_id,
+	</if>
+	<if test="id != null  ">
+		user_id,
+	</if>
+	<if test="userName != null  ">
+		user_name,
+	</if>
+	<if test="userType != null  ">
+		user_type,
+	</if>
+	<if test="createTime != null  ">
+		create_time,
+	</if>
+	</trim>
+	)
+	values (
+	<trim  suffixOverrides="," >
+	<if test="birthday != null  ">
+  		#{birthday},
+	</if>
+	<if test="country != null  ">
+	  	#{country.id},
+	</if>
+	<if test="email != null  ">
+		#{email},
+	</if>
+	<if test="enable != null  ">
+		#{enable},
+	</if>
+	<if test="gender != null  ">
+		#{gender},
+	</if>
+	<if test="lastLoginTime != null  ">
+		#{lastLoginTime},
+	</if>
+	<if test="nodeId != null  ">
+		#{nodeId},
+	</if>
+	<if test="parentNodeId != null  ">
+		#{parentNodeId},
+	</if>
+	<if test="pwd != null  ">
+		#{pwd},
+	</if>
+	<if test="sessionId != null  ">
+		#{sessionId},
+	</if>
+	<if test="id != null  ">
+		#{id,jdbcType=VARCHAR},
+	</if>
+	<if test="userName != null  ">
+		#{userName},
+	</if>
+	<if test="userType != null  ">
+		#{userType},
+	</if>
+	<if test="createTime != null  ">
+		curdate(),
+	</if>
+	</trim>
+  	)
+</insert>
+
+<!-- 插入用户权限记录 -->
+<insert id="addRoleByUser" parameterType="Object" >
+	insert into sys_user_role(user_id,role_id) 
+	<foreach collection="roleSet" item="roleSet" index="index" separator="union all" >  
+		select #{id,jdbcType=VARCHAR},#{roleSet.id} from dual   
+	</foreach>
+</insert>
+
+<!-- 插入用户货主权限记录 -->
+<insert id="addCustomerByUser" parameterType="Object" >
+	insert into sys_user_customer(user_id,customer_id)
+	<foreach collection="customerSet" item="customerSet" index="index" separator="union all" >
+		select #{id,jdbcType=VARCHAR},#{customerSet.id,jdbcType=VARCHAR} from dual
+	</foreach>
+</insert>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="update" parameterType="Object" >
+	update sys_user set 
+	<trim  suffixOverrides="," >
+	<if test="birthday != null  ">
+		birthday=#{birthday},
+	</if>
+	<if test="country != null  ">
+		country_id=#{country.id},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="email != null  ">
+		email=#{email},
+	</if>
+	<if test="enable != null  ">
+		enable=#{enable},
+	</if>
+	<if test="gender != null  ">
+		gender=#{gender},
+	</if>
+	<if test="lastLoginTime != null  ">
+		last_login_time=#{lastLoginTime},
+	</if>
+	<if test="nodeId != null  ">
+		node_id=#{nodeId},
+	</if>
+	<if test="parentNodeId != null  ">
+		parent_node_id=#{parentNodeId},
+	</if>
+	<if test="pwd != null  ">
+		pwd=#{pwd},
+	</if>
+	<if test="sessionId != null  ">
+		session_id=#{sessionId},
+	</if>
+	<if test="userName != null  ">
+		user_name=#{userName},
+	</if>
+	<if test="userType != null  ">
+		user_type=#{userType},
+	</if>
+	</trim> where user_id=#{id,jdbcType=VARCHAR}
+</update>
+
+<!-- 删除用户记录 -->
+<delete id="delete" parameterType="Object">
+	delete from sys_user where user_id=#{id,jdbcType=VARCHAR}
+</delete>
+
+<!-- 删除用户角色记录 -->
+<delete id="deleteRoleByUser" parameterType="Object">
+	delete from sys_user_role where user_id=#{id,jdbcType=VARCHAR}
+</delete>
+
+<!-- 删除用户货主权限记录 -->
+<delete id="deleteCustomerByUser" parameterType="Object">
+	delete from sys_user_customer where user_id=#{id,jdbcType=VARCHAR}
+</delete>
+ 
+<!-- 根据id查询 用户登录 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	from sys_user
+	where user_id=#{id,jdbcType=VARCHAR}
+</select>
+
+<!-- 用户登录 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from sys_user 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询用户登录列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from sys_user 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 查询用户菜单 -->
+<select id="queryListById" resultMap="queryRoleForListMap"  parameterType="Object">
+	select a.user_id,
+	       a.user_name,
+	       a.pwd,
+	       a.node_id,
+	       a.parent_node_id,
+	       a.birthday,
+	       a.country_id,
+	       f.country_name,
+	       f.country_eng_name,
+	       a.create_time,
+	       a.email,
+	       a.enable,
+	       a.gender,
+	       a.last_login_time,
+	       a.session_id,
+	       a.user_type,
+	       c.role_id,
+	       c.role_name,
+	       e.menu_id,
+	       e.display_seq,
+	       e.menu_name,
+	       e.menu_type,
+	       e.parent_id,
+	       e.url,
+	       i.customer_id,
+	       j.customer_abbreviation as customer_name
+	  from sys_user a
+	  left outer join sys_user_role b on a.user_id = b.user_id
+	  left outer join sys_role c on b.role_id = c.role_id
+	  left outer join sys_role_menu d on c.role_id = d.role_id
+	  left outer join sys_menu e on d.menu_id = e.menu_id
+	  left outer join sys_country f on a.country_id = f.country_id
+	  left outer join sys_user_customer i on a.user_id = i.user_id
+	  left outer join md_customer j on i.customer_id = j.id and j.deleted = 0
+	  where a.user_id = #{id,jdbcType=VARCHAR}
+	  order by a.user_id,c.role_id,e.menu_id,i.customer_id
+</select>
+
+<!-- 查询用户菜单 -->
+<select id="queryListByAll" resultMap="queryRoleForListMap"  parameterType="Object">
+	select a.user_id,
+	       a.user_name,
+	       a.pwd,
+	       a.node_id,
+	       a.parent_node_id,
+	       a.birthday,
+	       a.country_id,
+	       f.country_name,
+	       f.country_eng_name,
+	       a.create_time,
+	       a.email,
+	       a.enable,
+	       a.gender,
+	       a.last_login_time,
+	       a.session_id,
+	       a.user_type,
+	       c.role_id,
+	       c.role_name,
+	       e.menu_id,
+	       e.display_seq,
+	       e.menu_name,
+	       e.menu_type,
+	       e.parent_id,
+	       e.url,
+	       i.customer_id,
+	       j.customer_abbreviation as customer_name
+	  from sys_user a
+	  left outer join sys_user_role b on a.user_id = b.user_id
+	  left outer join sys_role c on b.role_id = c.role_id
+	  left outer join sys_role_menu d on c.role_id = d.role_id
+	  left outer join sys_menu e on d.menu_id = e.menu_id
+	  left outer join sys_country f on a.country_id = f.country_id
+	  left outer join sys_user_customer i on a.user_id = i.user_id
+	  left outer join md_customer j on i.customer_id = j.id and j.deleted = 0
+	  order by a.user_id,c.role_id,e.menu_id,i.customer_id
+</select>
+
+<!-- 查询客户列表 -->
+<select id="queryCustomerByAll" resultMap="CustomerResultMap"  parameterType="Object">
+	select a.id as customer_id,a.customer_abbreviation as customer_name
+	from md_customer a
+	where a.deleted = 0
+    order by a.customer_code
+</select>
+
+<!-- 根据ID查询客户列表 -->
+<select id="queryCustomerById" resultMap="CustomerResultMap"  parameterType="Object">
+	select a.id as customer_id,a.customer_abbreviation as customer_name
+	from md_customer a
+	where a.id = #{id,jdbcType=VARCHAR} 
+	and a.deleted = 0
+    order by a.customer_code
+</select>
+  	
+</mapper>   

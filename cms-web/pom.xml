@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.cms.web</groupId>
+	<artifactId>cms-web</artifactId>
+	<packaging>war</packaging>
+	<version>1.0</version>
+	<name>cms-web</name>
+	<parent>
+		<groupId>com.cms.framework</groupId>
+		<artifactId>cms-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../cms-parent</relativePath>
+	</parent>
+	<dependencies>
+		<dependency>
+			<groupId>com.cms.service</groupId>
+			<artifactId>cms-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.cms.utils</groupId>
+			<artifactId>cms-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

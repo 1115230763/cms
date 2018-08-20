@@ -1,0 +1,72 @@
+<beans  xmlns="http://www.springframework.org/schema/beans"
+		xmlns:batch="http://www.springframework.org/schema/batch" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/batch
+							http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+							http://www.springframework.org/schema/beans 
+							http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!--  for cvs -->
+<!--  	<bean id="lineTokenizer" class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"> -->
+<!-- 		<property name="names" value="id,sales,qty,staffName,date" /> -->
+<!-- 	</bean> -->
+<!-- for fixed length txt -->
+	<bean id="lineTokenizer" class="org.springframework.batch.item.file.transform.FixedLengthTokenizer">
+		<property name="names" value="name,credit" />
+		<property name="columns" value="1-10,11-12" />
+	</bean>
+	
+<!-- 	data type conversion -->
+<!--  	<bean name="fieldSetMapper" class="com.cms.batch.BatchBeanFieldSetMapper" /> --> 
+<!-- 	if no data type conversion, use BeanWrapperFieldSetMapper to map by name -->
+	<bean name="fieldSetMapper" class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+		<property name="targetType" value="com.cms.batch.BatchBean"/>
+	</bean>
+
+<!--  	<bean id="batchReader" class="com.cms.batch.BatchReader"/> -->
+	<bean name="batchReader" class="org.springframework.batch.item.file.FlatFileItemReader">
+<!-- 		<property name="resource" value="classpath:batch/testBatch.csv" /> -->
+<!-- 		<property name="resource" value="classpath:batch/fixLength.txt" /> -->
+		<property name="lineMapper">
+		    <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+				<property name="lineTokenizer" ref="lineTokenizer"/>
+				<property name="fieldSetMapper" ref="fieldSetMapper"/>
+		    </bean>
+		</property>
+	</bean>
+	
+<!-- 	Multiple files read -->
+	<bean id="multiResourceReader" class=" org.springframework.batch.item.file.MultiResourceItemReader">
+		<property name="resources" value="classpath:batch/*.txt" />
+		<property name="delegate" ref="batchReader" />
+  	</bean>
+  
+	<bean name="batchProcessor" class="com.cms.batch.BatchProcessor" />
+ 	<bean name="batchWriter" class="com.cms.batch.BatchWriter"/>
+ 	
+<!--  	Listener -->
+ 	<bean name="batchStepListener" class="com.cms.batch.BatchStepListener"/>
+ 	<bean name="batchReadListener" class="com.cms.batch.BatchReadListener"/>
+ 	<bean name="batchWriteListener" class="com.cms.batch.BatchWriteListener"/>
+ 	
+	<batch:job id="batch001">
+		<batch:step id="batch001Step1">
+			<batch:tasklet>
+				<batch:chunk reader="multiResourceReader" processor="batchProcessor" writer="batchWriter" commit-interval="10" skip-limit="250">
+					<batch:skippable-exception-classes>
+						<!-- 不允许跳过，Job中止，DB回滚-->
+						<batch:exclude class="java.lang.Exception"/>
+						
+						<!-- 允许跳过，继续下一笔，DB不回滚 -->
+						<batch:include class="java.lang.RuntimeException"/>
+						<batch:include class="org.springframework.batch.item.file.FlatFileParseException"/>
+					</batch:skippable-exception-classes>
+				</batch:chunk>
+				<batch:listeners>
+					<batch:listener ref="batchStepListener" />
+					<batch:listener ref="batchReadListener" />
+					<batch:listener ref="batchWriteListener" />
+				</batch:listeners>
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
+</beans>

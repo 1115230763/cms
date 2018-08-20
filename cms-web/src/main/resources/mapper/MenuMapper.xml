@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cms.dao.MenuDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.cms.entity.Menu" >
+	<result column="menu_id" property="id"/>
+	<result column="menu_name" property="menuName"/>
+	<result column="display_seq" property="displaySeq"/>
+	<result column="menu_type" property="menuType"/>
+	<result column="parent_id" property="parentId"/>
+	<result column="url" property="url"/>
+</resultMap>
+
+<resultMap id="queryForRoleListMap" type="com.cms.entity.Menu" >
+	<result column="menu_id" property="id"/>
+	<result column="menu_name" property="menuName"/>
+	<result column="display_seq" property="displaySeq"/>
+	<result column="menu_type" property="menuType"/>
+	<result column="parent_id" property="parentId"/>
+	<result column="url" property="url"/>
+	<collection property="roleSet" javaType="java.util.Set" ofType="com.cms.entity.Role">
+		<result column="role_id" property="id"/>
+		<result column="role_name" property="roleName"/>
+	</collection>
+</resultMap>
+       
+<!-- Sys_Menu table all fields -->
+<sql id="Base_Column_List" >
+	 menu_id,menu_name,menu_type,url,parent_id,display_seq
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.displaySeq != null and condition.displaySeq != ''" >
+	    and display_seq =  #{condition.displaySeq}
+	</if>
+	<if test="condition.menuId != null and condition.menuId != ''" >
+	    and menu_id =  #{condition.id,jdbcType=VARCHAR}
+	</if>
+	<if test="condition.menuName != null and condition.menuName != ''" >
+	    and menu_name =  #{condition.menuName}
+	</if>
+	<if test="condition.menuType != null and condition.menuType != ''" >
+	    and menu_type =  #{condition.menuType}
+	</if>
+	<if test="condition.parentId != null and condition.parentId != ''" >
+	    and parent_id =  #{condition.parentId}
+	</if>
+	<if test="condition.url != null and condition.url != ''" >
+	    and url =  #{condition.url}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+        select uuid() from dual
+    </selectKey>
+	insert into sys_menu(
+	<if test="menuName != null  ">
+		menu_name,
+	</if>
+	<if test="menuType != null  ">
+		menu_type,
+	</if>
+	<if test="parentId != null  ">
+		parent_id,
+	</if>
+	<if test="url != null  ">
+		url,
+	</if>
+	<if test="displaySeq != null  ">
+		display_seq,
+	</if>
+	menu_id
+	)
+	values(
+	<if test="menuName != null  ">
+		#{menuName},
+	</if>
+	<if test="menuType != null  ">
+		#{menuType},
+	</if>
+	<if test="parentId != null  ">
+		#{parentId},
+	</if>
+	<if test="url != null  ">
+		#{url},
+	</if>
+	<if test="displaySeq != null  ">
+		#{displaySeq},
+	</if>
+	#{id,jdbcType=VARCHAR}
+	)
+</insert>
+
+<!-- 插入角色权限记录 -->
+<insert id="addRoleByMenu" parameterType="Object" >
+	insert into sys_role_menu(menu_id,role_id) 
+	<foreach collection="roleSet" item="roleSet" index="index" separator="union all" >  
+		select #{id,jdbcType=VARCHAR},#{roleSet.id,jdbcType=VARCHAR} from dual   
+	</foreach>  
+</insert>
+
+<!-- 修改记录，只修改只不为空的字段 -->
+<update id="update" parameterType="Object" >
+	update sys_menu set 
+	<trim  suffixOverrides="," >
+	<if test="menuName != null  ">
+		menu_name=#{menuName},
+	</if>
+	<if test="menuType != null  ">
+		menu_type=#{menuType},
+	</if>
+	<if test="parentId != null  ">
+		parent_id=#{parentId},
+	</if>
+	<if test="url != null  ">
+		url=#{url},
+	</if>
+	<if test="displaySeq != null  ">
+		display_seq=#{displaySeq},
+	</if>
+	</trim> where menu_id = #{id,jdbcType=VARCHAR}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete from sys_menu where menu_id = #{id,jdbcType=VARCHAR}
+</delete>
+
+<!-- 删除角色权限记录 -->
+<delete id="deleteRoleByMenu" parameterType="Object">
+	delete from sys_role_menu where menu_id = #{id,jdbcType=VARCHAR}
+</delete>
+ 
+<!-- 根据id查询 权限 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	from sys_menu where menu_id = #{id,jdbcType=VARCHAR}
+</select>
+
+<!-- 权限 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from sys_menu 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询权限列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from sys_menu 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 查询角色权限菜单 -->
+<select id="queryRoleListById" resultMap="queryForRoleListMap"  parameterType="Object">
+	select a.menu_id,
+	       a.display_seq,
+	       a.menu_name,
+	       a.menu_type,
+	       a.parent_id,
+	       a.url,
+	       c.role_id,
+	       c.role_name
+	  from sys_menu a
+	  left outer join sys_role_menu b on a.menu_id = b.menu_id
+	  left outer join sys_role c on b.role_id = c.role_id
+	 where a.menu_id = #{id,jdbcType=VARCHAR}
+</select>
+
+<!-- 查询角色权限菜单 -->
+<select id="queryByParentId" resultMap="queryForRoleListMap"  parameterType="Object">
+	select a.menu_id,
+	       a.display_seq,
+	       a.menu_name,
+	       a.menu_type,
+	       a.parent_id,
+	       a.url,
+	       c.role_id,
+	       c.role_name
+	  from sys_menu a
+	  left outer join sys_role_menu b on a.menu_id = b.menu_id
+	  left outer join sys_role c on b.role_id = c.role_id
+	 where a.parent_id = #{id,jdbcType=VARCHAR}
+</select>
+  	
+</mapper>   

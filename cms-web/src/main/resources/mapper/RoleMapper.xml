@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cms.dao.RoleDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.cms.entity.Role" >
+	<result column="role_id" property="id"/>
+	<result column="role_name" property="roleName"/>
+</resultMap>
+
+<resultMap id="queryForBtnListMap" type="com.cms.entity.Role">
+	<result column="role_id" property="id"/>
+	<result column="role_name" property="roleName"/>
+	<collection property="btnSet" javaType="java.util.Set" ofType="com.cms.entity.Btn">
+		<result column="btn_id" property="id"/>
+		<result column="btn_name" property="btnName"/>
+		<result column="btn_chs_name" property="btnChsName"/>
+		<result column="btn_level" property="btnLevel"/>
+	</collection>
+</resultMap>
+
+<resultMap id="queryForMenuListMap" type="com.cms.entity.Role">
+	<result column="role_id" property="id"/>
+	<result column="role_name" property="roleName"/>
+	<collection property="menuSet" javaType="java.util.Set" ofType="com.cms.entity.Menu">
+		<result column="menu_id" property="id"/>
+		<result column="menu_name" property="menuName"/>
+		<result column="menu_type" property="menuType"/>
+		<result column="url" property="url"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="display_seq" property="displaySeq"/>
+	</collection>
+</resultMap>
+
+<resultMap id="queryForAllListMap" type="com.cms.entity.Role">
+	<result column="role_id" property="id"/>
+	<result column="role_name" property="roleName"/>
+	<collection property="menuSet" javaType="java.util.Set" ofType="com.cms.entity.Menu">
+		<result column="menu_id" property="id"/>
+		<result column="menu_name" property="menuName"/>
+		<result column="menu_type" property="menuType"/>
+		<result column="url" property="url"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="display_seq" property="displaySeq"/>
+	</collection>
+	<collection property="btnSet" javaType="java.util.Set" ofType="com.cms.entity.Btn">
+		<result column="btn_id" property="id"/>
+		<result column="btn_name" property="btnName"/>
+		<result column="btn_chs_name" property="btnChsName"/>
+		<result column="btn_level" property="btnLevel"/>
+	</collection>
+</resultMap>
+       
+<!-- Sys_Role table all fields -->
+<sql id="Base_Column_List" >
+	 role_id,role_name
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.roleId != null and condition.roleId != ''" >
+	    and role_id =  #{condition.id,jdbcType=VARCHAR}
+	</if>
+	<if test="condition.roleName != null and condition.roleName != ''" >
+	    and role_name =  #{condition.roleName}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+        select uuid() from dual
+    </selectKey>
+	insert into sys_role(
+	<if test="roleName != null  ">
+  		role_name,
+	</if>
+  	role_id
+	)
+	values(
+	<if test="roleName != null  ">
+		#{roleName},
+	</if>
+	#{id,jdbcType=VARCHAR}
+	)
+</insert>
+
+<!-- 插入角色按钮记录 -->
+<insert id="addBtnByRole" parameterType="Object" >
+	insert into sys_role_btn(role_id,btn_id) 
+	<foreach collection="btnSet" item="btnSet" index="index" separator="union all" >  
+		select #{id,jdbcType=VARCHAR},#{btnSet.id,jdbcType=VARCHAR} from dual   
+	</foreach>  
+</insert>
+
+<!-- 修改记录，只修改只不为空的字段 -->
+<update id="update" parameterType="Object" >
+	update sys_role set 
+	<trim  suffixOverrides="," >
+	<if test="roleName != null  ">
+		role_name=#{roleName},
+	</if>
+	</trim> where role_id=#{id,jdbcType=VARCHAR}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete from sys_role where role_id = #{id,jdbcType=VARCHAR}
+</delete>
+
+<!-- 删除角色按钮记录 -->
+<delete id="deleteBtnByRole" parameterType="Object">
+	delete from sys_role_btn where role_id = #{id,jdbcType=VARCHAR}
+</delete>
+ 
+<!-- 根据id查询 角色 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	from sys_role
+	where role_id = #{id,jdbcType=VARCHAR}
+</select>
+
+<!-- 角色列表 -->
+<select id="queryListByAll"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	from sys_role
+	where 1 = 1
+</select>
+
+<!-- 角色 列表总数-->
+<select id="queryByCount" resultType="java.lang.Long"  parameterType="Object">
+	select count(1)
+	from sys_role
+	where 1 = 1
+</select>
+  	
+<!-- 查询角色列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from sys_role 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 查询角色按钮菜单 -->
+<select id="queryBtnListById" resultMap="queryForBtnListMap"  parameterType="Object">
+	select a.role_id,
+	       a.role_name,
+	       c.btn_id,
+	       c.btn_chs_name,
+	       c.btn_level,
+	       c.btn_name
+	  from sys_role a
+	  left outer join sys_role_btn b on a.role_id = b.role_id
+	  left outer join sys_btn c on b.btn_id = c.btn_id
+	 where a.role_id = #{id,jdbcType=VARCHAR}
+</select>
+
+<!-- 查询角色权限菜单 -->
+<select id="queryMenuListById" resultMap="queryForMenuListMap"  parameterType="Object">
+	select a.role_id,
+	       a.role_name,
+	       c.menu_id,
+	       c.display_seq,
+	       c.menu_name,
+	       c.menu_type,
+	       c.parent_id,
+	       c.url
+	  from sys_role a
+	  left outer join sys_role_menu b on a.role_id = b.role_id
+	  left outer join sys_menu c on b.menu_id = c.menu_id
+	 where a.role_id = #{id,jdbcType=VARCHAR}
+</select>
+
+<!-- 查询权限按钮菜单 -->
+<select id="queryRoleListByAll" resultMap="queryForAllListMap"  parameterType="Object">
+	select a.role_id,
+	       a.role_name,
+	       c.btn_id,
+	       c.btn_chs_name,
+	       c.btn_level,
+	       c.btn_name,
+	       e.menu_id,
+	       e.display_seq,
+	       e.menu_name,
+	       e.menu_type,
+	       e.parent_id,
+	       e.url
+	  from sys_role a
+	  left outer join sys_role_btn b on a.role_id = b.role_id
+	  left outer join sys_btn c on b.btn_id = c.btn_id
+	  left outer join sys_role_menu d on a.role_id = d.role_id
+	  left outer join sys_menu e on d.menu_id = e.menu_id
+	 order by a.role_id
+</select>
+
+<!-- 查询角色权限菜单 -->
+<select id="queryUniqueIdByName" resultMap="queryForMenuListMap"  parameterType="Object">
+	select distinct a.role_id,a.role_name
+	  from sys_role a
+	 where a.role_name = #{roleName,jdbcType=VARCHAR}
+</select>
+  	
+</mapper>   

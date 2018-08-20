@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 	xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:mvc="http://www.springframework.org/schema/mvc" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xmlns:p="http://www.springframework.org/schema/p" 
+		xmlns:context="http://www.springframework.org/schema/context" 
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+      						http://www.springframework.org/schema/beans/spring-beans.xsd
+      						http://www.springframework.org/schema/mvc
+							http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+       						http://www.springframework.org/schema/context
+        					http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+        						
+	<!-- 扫描controller包下所有类还有ExceptionResolver-->
+	<context:component-scan base-package="com.cms.controller" />
+
+	<mvc:annotation-driven>
+	    <mvc:message-converters>
+			<bean id="fastJsonHttpMessageConverter" class="com.cms.utils.converter.FastJsonHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value><!-- 避免IE执行AJAX时,返回JSON出現下载文件 -->
+					</list>
+				</property>
+			</bean>
+	    </mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- mvc:interceptors 必须写在 mvc:annotation-driven 之后，才能起作用-->
+	<mvc:interceptors>
+		<bean class="com.cms.interceptor.LoginInterceptor" />
+	</mvc:interceptors> 
+	
+	<!-- 对模型试图的解析，即在模型试图名称添加前后缀 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" />
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8"/>
+		<property name="maxUploadSize" value="3145728"/><!-- 上传文件大小限制为9M，9*1024*1024 -->
+		<property name="maxInMemorySize" value="4096"/>
+		<property name="resolveLazily" value="true"/>  
+	</bean>
+</beans>

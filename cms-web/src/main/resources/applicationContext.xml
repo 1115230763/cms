@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 	xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd">
+		
+	<import resource="classpath:\conf\spring-i18n.xml"/>
+	<import resource="classpath:\conf\spring-interceptor.xml"/>
+	<import resource="classpath:\conf\spring-ehcache.xml"/>
+	<import resource="classpath:\conf\spring-captcha.xml"/>
+	<import resource="classpath:\conf\spring-security.xml"/>
+	<import resource="classpath:\conf\spring-mail.xml"/>
+	<import resource="classpath:\conf\spring-mybatis.xml"/>
+	<import resource="classpath:\conf\spring-quartz.xml"/> 
+</beans>

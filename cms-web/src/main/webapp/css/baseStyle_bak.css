@@ -1,0 +1,553 @@
+@CHARSET "UTF-8";
+
+::-webkit-scrollbar{
+	width: 6px;
+    height:5px;
+    background-color:#fcfcfc;
+    -webkit-border-radius:4px;
+}
+::-webkit-scrollbar-thumb {
+  	background-color: gainsboro;
+  	-webkit-border-radius:4px;
+} 
+::-webkit-scrollbar-thumb:hover{
+    background-color:#999;
+    -webkit-border-radius:4px;
+}    
+::-webkit-scrollbar-track-piece{  
+	height: 20px;
+   background-color:#fcfcfc;  
+   -webkit-border-radius:4px;  
+}
+.titleRightTxt{
+	display: inline-block;
+	margin:0 10px;
+}
+.titleLeftTxt{
+	display: inline-block;
+	margin-left:10px;
+}
+.addDockBtns{
+	margin:10px;
+	float:right;
+	width:600px;
+	min-width:600px;
+}
+.addImgPosition{
+	vertical-align:middle;
+}
+.btn-color{
+	margin-left:5px;
+}
+.btn-color .l-btn-text {
+    font-size: 14px;
+}
+.btn-green,.greenColBtn{
+    color:white;
+    border:none;
+    padding:0px 10px;
+    background: #78c64c;
+    margin-left:10px;
+}
+.btn-green:hover,.greenColBtn:HOVER{
+	color:white;
+	border:none;
+    background: #67aa41;   
+}
+.btn-white{
+	color:#666;
+	padding:0px 10px;
+	margin-left:10px;
+	background: #fff;
+    border:1px solid #ddd;
+}
+.btn-white:hover{
+	color:#666;
+    background: #f2f2f2;  
+}
+.btn-blue{
+	color:white;
+    border:none;
+    padding:0px 10px;
+    background: #149bff;  
+    margin-left: 10px;  
+}
+.btn-blue:hover{
+	color:white;
+	border:none;
+	background: #177fdb;    
+}
+.btn-textBlue{
+	color:#666;
+	padding:0px 10px;
+	background: #fff;
+    border:1px solid #fff;
+}
+.btn-textBlue:hover{
+	color:#1b94ff;
+    background: #fff;
+    border:1px solid #fff;
+}
+.tab1_spanBlue{
+	width: 4px;
+	height: 14px;
+	background: #ffa722;
+	display: inline-block;
+	vertical-align: text-bottom;
+	margin-right: 20px;
+}
+.tab1_spanTitleTxt{
+	color: #666;
+	font-size: 14px;
+	font-weight: bolder;
+}
+.listHead {
+	height: 34px;
+}
+
+.listTitle {
+	line-height: 34px;
+	font-size: 16px;
+	color: #49637a;
+	font-weight: bold;
+	margin-left: 20px;
+}
+
+fieldset { 
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	border-width: 0;
+	padding-left: 16px;
+}
+
+legend {
+	height: 0px;
+	color: #fff;
+	-webkit-padding-start: 0px;
+	-webkit-padding-end: 0px;
+	color: #fff;
+}
+.datagrid .datagrid-pager {
+	    background: #fff;
+}
+.datagrid-toolbar, .datagrid-pager {
+	    background: #fff;
+	    border-color: #fcfcfc;
+}
+.datagrid-header{
+	    background: #f6f9fd;
+	    border-width: 1px 0 1px 0;
+	    border-style: solid;
+}
+.datagrid-header td.datagrid-header-over{
+	    background: #f6f9fd;
+}
+.dialog-toolbar, .dialog-button {
+	    border: none;
+	    background:none;
+    	border-top: 1px solid #ccc;
+}
+.pagination-page-list {
+	    margin: 0px 20px;
+	    border-radius: 6px;
+}
+.pagination-btn-separator {
+	    margin: 3px 5px;
+}
+.pagination .pagination-num {
+	    margin: 0 10px;
+	    text-align: center;
+	    border-radius: 6px;
+}
+.l-btn-plain {
+	    margin: 0 5px;
+}
+.panel-tool a {
+	    margin: 0 10px 0 2px;
+}
+.window .window-body {
+	    border-width: 0px;
+}
+.window-shadow {
+	    background: none;
+	    -webkit-box-shadow: none;
+	    box-shadow: none;
+}
+.window{
+		padding:none;
+		background: #fff;
+}
+.window .window-header .panel-title {
+	    font-size: 14px;
+	    color: #fff;
+	    height: 40px;
+	    line-height: 45px;
+	    display: inline-block;
+	    width: 100px;
+	    background: #1B94FF;
+	    margin-left: 30px;
+	    margin-top: -10px;
+	    padding-top: 4px;
+	    text-align: center;
+	    border-radius: 4px;
+	    font-weight: normal;
+}
+.messager-window .window-header .panel-title {
+		width:60px;
+		height: 24px;
+		font-size:12px;
+		line-height: 25px;
+		background: #ffa722;
+		margin-left: 10px;
+		margin-top: 10px;
+		padding-top: 0px;
+}
+.messager-window .window-header .window-body {
+		margin-top: 10px;
+}
+.panel-header {
+		background:none;
+		border:none;
+}
+.textbox{
+	    border-color: #e4e4e4;
+}
+.textbox:hover{
+	    border-color: #09f;
+}
+.validatebox-invalid {
+	    background-color: #fff;
+}
+.textbox-invalid {
+	    border-color: pink;
+	    background: #fff;
+}
+.textbox-invalid:hover {
+	    border-color: pink;
+}
+.combo-arrow {
+		margin-right: 5px;
+	    background: #fff url(../images/menuImg/drop-downIpt.png) no-repeat center center;
+}
+.combo-arrow:hover {
+	    background: #fff url(../images/menuImg/drop-downIpt.png) no-repeat center center;
+}
+.datebox .combo-arrow {
+	    background: #fff url(../images/menuImg/diary.png) no-repeat center center;
+}
+.datebox .combo-arrow:hover {
+	    background: #fff url(../images/menuImg/diary.png) no-repeat center center;
+}
+框架样式
+.tabs li.tabs-selected a.tabs-inner {
+    font-weight: normal;
+}
+.datagrid-header td, .datagrid-body td, .datagrid-footer td {
+	border-width: 0 1px 1px 0;
+	border-color: #e5eaf0;
+	border-style: solid;
+	margin: 0;
+	padding: 0;
+}
+
+表格
+.datagrid-header-row {
+	height: 50px;
+	background: #f6f9fd;
+	padding-left: 10px;
+}
+
+.datagrid-row {
+	height: 40px;
+	padding-left: 10px;
+	background: #fff;
+}
+
+.datagrid-row-alt {
+	background: #f6f9fd;
+}
+
+.datagrid-htable {
+	font-weight: bold;
+}
+
+.datagrid-htable, .datagrid-btable {
+	color: #555;
+}
+
+.datagrid-header .datagrid-cell span, .datagrid-cell {
+	font-size: 14px;
+	text-align: left;
+}
+
+.datagrid-row-selected {
+	background: #1b94ff;
+	color: #fff;
+}
+
+头部tool样式
+fieldset {
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	border-width: 0;
+}
+
+legend {
+	height: 0px;
+	color: #fff;
+	-webkit-padding-start: 0px;
+	-webkit-padding-end: 0px;
+	color: #fff;
+}
+
+th {
+	font-weight: normal;
+}
+
+.tab1_spanBlue {
+	height: 20px;
+}
+.tableHeadBaseText tr,.tableHeadDialogBase tr{
+	margin-top:10px;
+	display:flex;
+	justify-content: flex-start;
+	align-items: center;
+	font-size: 14px;
+}
+.tableHeadBaseText tr th ,.tableHeadBaseText td  input,.tableHeadDialogBase tr th ,.tableHeadDialogBase td input{
+	font-size: 14px;
+	color: #555;
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.textbox .textbox-text{
+	color: #333;
+	font-size: 14px;
+}
+.removeRow,.openSkuDialog {
+	border-color:#fff;
+	border:none;
+	color: #333;
+	font-size: 14px;
+	background: #fff;
+	margin-left: 5px;
+}
+.openSkuDialog {
+	color:#149bff;
+}
+.dedicateOpenSkuDialog {
+	background: transparent;
+}
+.openSkuDialog:HOVER,.dedicateOpenSkuDialog:HOVER{
+	border-color:#fff;
+	background: #fff;	
+	color:#149bff;
+}
+.removeRow:HOVER {
+	color: red;
+	background: #fff;
+	border-color:#fff;
+}
+.deleteBtnLtn .l-btn:HOVER {
+	border: 0px;
+}
+.l-btn-text {display: flex;align-items: center;justify-content: center;line-height:30px;font-size: 14px;}
+.messager-button {
+    text-align: center;
+    padding-top: 10px;
+}
+.dialog-button {
+     border-top: 0px;
+}
+.panel-body {
+    font-size: 14px;
+}
+自定义样式
+
+ .submitBtn,.closeBtn,.hasColBtn,.noColBtn,.greenColBtn {
+	font-size: 14px;
+	width: 60px;
+	height: 30px;
+	line-height:30px;
+	border-radius: 4px;
+	margin-top:5px;
+	margin-left: 10px;
+}
+.submitBtn,.hasColBtn {
+	border-width: 0px;
+	background: #149bff;
+	color:#fff;
+}
+.submitBtn:HOVER,.hasColBtn:HOVER{
+	border-width: 0px;
+	background: #177fdb; 
+	color:#fff;
+}
+.closeBtn,.noColBtn{
+	border:1px solid #e4e4e4;
+	background: #fff;
+	color:#666;
+}
+.noColBtn:HOVER,.closeBtn:HOVER{
+	color:#666;
+    background: #f2f2f2;  
+}
+.baseTextStyle {
+	font-size: 14px;
+	color: #555;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.tableTitle_head {
+	display: inline-block;
+}
+
+.listTitle {
+	line-height: 34px;
+	font-size: 16px;
+	color: #49637a;
+	font-weight: bold;
+	margin-left: 20px;
+}
+
+.iconAdnText {
+	display: inline-block;
+	justify-content: flex-end;
+	align-items: center;
+	margin-right: 10px; 
+	margin-bottom 10px;
+	float: right;
+}
+
+.orangeTitleBox {
+	margin-top:10px;
+	width: 100px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.orange_span {
+	width: 4px;
+	height: 14px;
+	background: #ffa722;
+}
+
+.orange_title {
+	font-size: 14px;
+	font-weight: bold;
+	color: #666;
+	margin-left: 10px;
+}
+
+
+.inputBorderNone th {
+	height:28px;
+	line-height:28px;
+	width: 164px; 
+	text-align: center;
+	border: 1px solid #e4e4e4;
+	background: #F5F5F5;
+}
+.inputBorderNone th:FIRST-OF-TYPE {
+	border-radius: 5px 0px 0px 5px;
+}
+.inputBorderNone  .textbox {
+    border: 1px solid #e4e4e4;
+    border-radius: 0px;
+} 
+ .inputBorderNone .lastOfRound{
+ 	margin-left:0px;
+ 	height:28px;
+    border: 1px solid #e4e4e4;
+	border-radius: 0px 5px 5px  0px;
+} 
+.inputBorderNone input{
+	 text-align: center;
+	 height: 22px;
+}
+
+*, th {
+	font-family: '微软雅黑';
+}
+.tableWidth{
+	width:1133px;
+	min-width:1133px
+}
+.dialogTableWidth{
+	width: 910px;
+	min-width: 910px;
+}
+.textCountThree{
+	width:42px;
+}
+.textCountFour {
+	width: 70px;
+}
+.textCount_four{
+	width:56px;
+}
+.textCountFive{
+	width:84px;
+}
+.textCount_five{
+	width:70px;
+}
+.textCountSix{
+	width:98px;
+}
+.textCount_six{
+	width:84px;
+}
+.textCount_sereven{
+	width:98px;
+}
+.searchBox{
+			top:15px;
+			left:15px;
+			width:770px;
+			font-size:12px;
+			background:#fff;
+			position:absolute;
+			z-index:3;
+			border-radius:4px;
+			box-sizing: border-box;
+			box-shadow:0 0 5px rgba(0,0,0,0.1) ;
+}
+ 
+.datagrid-row-selected .checkColor{
+	color:#fff;
+}
+.btn-address {
+	border: none;
+	background: #fff;
+}
+.btn-address:HOVER {
+	background: #fff;
+	border: none;
+}
+.btn-textBlue{
+	color:#1b94ff;
+	padding:0px 10px;
+	background: #fff;
+    border:1px solid #fff;
+}
+.btn-textGray{
+	color:#666;
+	padding:0px 2px;
+	background: none;
+    border:1px solid #ddd;
+}
+.btn-textGray:HOVER {
+	color:#fff;
+	background: #1b94ff;
+    border:1px solid #1b94ff;
+}
+.locationImg {
+	padding-right: 16px;
+}
+.boxTopShadow{
+box-shadow:0 -2px 7px rgba(0,0,0,0.1) ;
+}

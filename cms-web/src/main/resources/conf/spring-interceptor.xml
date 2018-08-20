@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 	xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xmlns:mvc="http://www.springframework.org/schema/mvc" 
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+      						http://www.springframework.org/schema/beans/spring-beans.xsd
+         					http://www.springframework.org/schema/mvc
+							http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+	
+	<!-- 拦截器 -->
+	<bean id="serviceLogInterceptor" class="com.cms.interceptor.ServiceLogInterceptor"/> 
+	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="proxyTargetClass" value="true"/>
+		<property name="beanNames">
+			<list>
+				<value>*Service</value>
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>serviceLogInterceptor</value>
+			</list>
+		</property>
+	</bean>
+</beans>

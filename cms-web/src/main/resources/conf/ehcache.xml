@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="true"
+		monitoring="autodetect" dynamicConfig="true">
+	<!--
+		timeToLiveSeconds 當緩存存活n秒後銷毀
+		name：緩存名稱。
+		maxElementsInMemory：緩存最大個數。
+		eternal:對象是否永久有效，一但設置了，timeout將不起作用。
+		timeToIdleSeconds：設置對象在失效前的允許閒置時間（單位：秒）。僅當eternal=false對象不是永久有效時使用，可選屬性，
+						     預設值是0，也就是可閒置時間無窮大。 
+		timeToLiveSeconds：設置對象在失效前允許存活時間（單位：秒）。最大時間介於創建時間和失效時間之間。僅當eternal=false對象不是
+						     永久有效時使用，預設是0.，也就是對象存活時間無窮大。 
+		overflowToDisk：當內存中對象數量達到maxElementsInMemory時，Ehcache將會對象寫到磁碟中。 
+		diskSpoolBufferSizeMB：這個參數設置DiskStore（磁碟緩存）的緩存區大小。預設是30MB。每個Cache都應該有自己的一個緩衝區。 
+		maxElementsOnDisk：硬盤最大緩存個數。 
+		diskPersistent：是否緩存虛擬機重啟期數據 Whether the disk store persists between restarts of the Virtual Machine. 
+					    The default value is false. 
+		diskExpiryThreadIntervalSeconds：磁碟失效線程運行時間間隔，預設是120秒。 
+		memoryStoreEvictionPolicy：當達到maxElementsInMemory限制時，Ehcache將會根據指定的策略去清理內存。
+								     預設策略是LRU（最近最少使用）。你可以設置為FIFO（先進先出）或是LFU（較少使用）。 
+		clearOnFlush：內存數量最大時是否清除。 
+	-->
+	
+<!-- 	<diskStore path="java.io.tmpdir" /> -->
+<!-- 	<diskStore path="/home/473103093/Backup/cachetmpdir" /> -->
+	<!-- <diskStore path="c:/cachetmpdir" /> -->
+	<defaultCache 
+		maxElementsInMemory="10000" 
+		eternal="false"
+		timeToIdleSeconds="120" 
+		timeToLiveSeconds="120" 
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000" 
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120" 
+		memoryStoreEvictionPolicy="LRU" />
+		
+	<cache 
+		name="countryCache" 
+		maxElementsInMemory="1"
+		maxElementsOnDisk="10000000" 
+		eternal="true" 
+		overflowToDisk="true"
+		diskSpoolBufferSizeMB="50" />
+	<cache 
+		name="menuCache" 
+		maxElementsInMemory="1"
+		maxElementsOnDisk="10000000" 
+		eternal="true" 
+		overflowToDisk="true"
+		diskSpoolBufferSizeMB="50" />
+	<cache 
+		name="btnCache" 
+		maxElementsInMemory="1"
+		maxElementsOnDisk="10000000" 
+		eternal="true" 
+		overflowToDisk="true"
+		diskSpoolBufferSizeMB="50" />
+	<cache 
+		name="dressDetailCache" 
+		maxElementsInMemory="1"
+		maxElementsOnDisk="10000000" 
+		eternal="true" 
+		overflowToDisk="true"
+		diskSpoolBufferSizeMB="50" />
+</ehcache>

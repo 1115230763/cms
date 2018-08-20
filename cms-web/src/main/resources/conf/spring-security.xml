@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+		xmlns:security="http://www.springframework.org/schema/security"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		    				http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/security
+				   			http://www.springframework.org/schema/security/spring-security.xsd">
+	
+	<bean id="restEncoder" class="com.cms.security.RestEncoder" /><!-- custom password encoder -->
+	<security:authentication-manager alias="authenticationManager"><!-- Authentication manager. -->
+		<security:authentication-provider>
+			<security:password-encoder ref="restEncoder"/> 
+			<!-- use DB authentication-->
+			<security:jdbc-user-service  
+	            data-source-ref="dataSource"  
+	            users-by-username-query="SELECT user_id as USERNAME,Pwd as PASSWORD,CASE enable WHEN 1 THEN 'true' ELSE 'false' END as ENABLE from user WHERE USER_NAME=?"  
+	            authorities-by-username-query="select au.user_id as USERNAME, r.role_name as AUTHORITIES from user au,user_role aur,role r where au.user_id = aur.user_id and aur.role_id = r.role_id and au.user_id = ?" />  
+		</security:authentication-provider>
+	</security:authentication-manager>	
+	
+	<bean id="restServicesSuccessHandler" class="com.cms.security.RestAuthenticationSuccessHandler" /><!-- A handler for successful REST service authentication -->
+	<bean id="restServicesFilter" class="com.cms.security.RestUsernamePasswordAuthenticationFilter"><!-- Filter for REST services. -->
+		<property name="usernameParameter" value="${usernameParameter}"/><!-- custom username parameter name -->
+        <property name="passwordParameter" value="${passwordParameter}"/><!-- custom password parameter name -->
+		<property name="postOnly" value="true" />
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="authenticationSuccessHandler" ref="restServicesSuccessHandler" />
+	</bean>
+	
+	<bean id="restServicesEntryPoint" class="com.cms.security.RestAuthenticationEntryPoint" /><!-- REST service EntryPoint -->
+	<security:http pattern="/WS/**" authentication-manager-ref="authenticationManager" entry-point-ref="restServicesEntryPoint" create-session="stateless" use-expressions="true">
+		<security:intercept-url pattern="/WS/**" method="POST" access="hasRole('ROLE_AD')"/><!-- only role_admin can access this ws-->
+		<security:custom-filter ref="restServicesFilter" before="PRE_AUTH_FILTER" />
+		<security:csrf request-matcher-ref="restCsrfSecurityRequestMatcher"/>
+	</security:http>
+	
+	<bean id="restCsrfSecurityRequestMatcher" class="com.cms.security.RestCsrfSecurityRequestMatcher">
+		<property name="excludeUrls">
+			<list>
+				<value>/WS</value>
+			</list>
+		</property>
+	</bean>
+</beans>

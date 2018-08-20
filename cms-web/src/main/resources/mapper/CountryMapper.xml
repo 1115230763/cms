@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cms.dao.CountryDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.cms.entity.Country" >
+	<result column="country_id" property="id"/>
+	<result column="country_name" property="countryName"/>
+	<result column="country_eng_name" property="countryEngName"/>
+</resultMap>
+       
+<!-- Sys_Country table all fields -->
+<sql id="Base_Column_List" >
+	 country_id,country_name,country_eng_name
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.countryCurrency != null and condition.countryCurrency != ''" >
+	    and country_currency =  #{condition.countryCurrency}
+	</if>
+	<if test="condition.countryEngName != null and condition.countryEngName != ''" >
+	    and country_eng_name =  #{condition.countryEngName}
+	</if>
+	<if test="condition.countryId != null and condition.countryId != ''" >
+	    and country_id =  #{condition.countryId}
+	</if>
+	<if test="condition.countryName != null and condition.countryName != ''" >
+	    and country_name =  #{condition.countryName}
+	</if>
+	<if test="condition.countryShortName != null and condition.countryShortName != ''" >
+	    and country_short_name =  #{condition.countryShortName}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+	insert into sys_country(country_currency,country_eng_name,country_id,country_name,country_short_name)
+	values(#{countryCurrency},#{countryEngName},#{countryId},#{countryName},#{countryShortName})
+</insert>
+
+<!-- 修改记录，只修改只不为空的字段 -->
+<update id="update" parameterType="Object" >
+	update sys_country set 
+	<trim  suffixOverrides="," >
+	<if test="countryEngName != null  ">
+		country_eng_name=#{countryEngName},
+	</if>
+	<if test="countryId != null  ">
+		country_id=#{countryId},
+	</if>
+	<if test="countryName != null  ">
+		country_name=#{countryName},
+	</if>
+	<if test="countryShortName != null  ">
+		country_short_name=#{countryShortName},
+	</if>
+	</trim> where country_currency=#{countryCurrency}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete from sys_country where country_currency = #{countryCurrency}
+</delete>
+ 
+<!-- 根据id查询 国籍 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from sys_country where country_id = #{0}
+</select>
+
+<!-- 国籍列表 -->
+<select id="queryListByAll"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from sys_country where 1 = 1
+</select>
+
+<!-- 国籍 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from sys_country 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询国籍列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from sys_country 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cms.dao.BtnDao" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.cms.entity.Btn" >
+	<result column="btn_id" property="id"/>
+	<result column="btn_name" property="btnName"/>
+	<result column="btn_chs_name" property="btnChsName"/>
+	<result column="btn_level" property="btnLevel"/>
+</resultMap>
+       
+<!-- Sys_Btn table all fields -->
+<sql id="Base_Column_List" >
+	btn_id,btn_name,btn_chs_name,btn_level
+</sql>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.btnChsName != null and condition.btnChsName != ''" >
+	    and btn_chs_name =  #{condition.btnChsName}
+	</if>
+	<if test="condition.btnId != null and condition.btnId != ''" >
+	    and btn_id =  #{condition.btnId}
+	</if>
+	<if test="condition.btnLevel != null and condition.btnLevel != ''" >
+	    and btn_level =  #{condition.btnLevel}
+	</if>
+	<if test="condition.btnName != null and condition.btnName != ''" >
+	    and btn_name =  #{condition.btnName}
+	</if>
+</trim>
+</sql>
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+        select uuid() from dual
+    </selectKey>
+	insert into sys_btn(
+	<if test="btnName != null  ">
+		btn_name,
+	</if>
+	<if test="btnChsName != null  ">
+		btn_chs_name,
+	</if>
+	<if test="btnLevel != null  ">
+		btn_level,
+	</if>
+	btn_id
+	)
+	values(
+	<if test="btnName != null  ">
+		#{btnName},
+	</if>
+	<if test="btnChsName != null  ">
+		#{btnChsName},
+	</if>
+	<if test="btnLevel != null  ">
+		#{btnLevel},
+	</if>
+	#{id,jdbcType=VARCHAR}
+	)
+</insert>
+
+<!-- 修改记录，只修改只不为空的字段 -->
+<update id="update" parameterType="Object" >
+	update sys_btn set 
+	<trim  suffixOverrides="," >
+	<if test="btnName != null  ">
+		btn_name=#{btnName},
+	</if>
+	<if test="btnChsName != null  ">
+		btn_chs_name=#{btnChsName},
+	</if>
+	<if test="btnLevel != null  ">
+		btn_level=#{btnLevel},
+	</if>
+	</trim> where btn_id=#{id,jdbcType=VARCHAR}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete from sys_btn where btn_id=#{id,jdbcType=VARCHAR}
+</delete>
+ 
+<!-- 根据id查询 按钮 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	from sys_btn
+	where btn_id = #{id,jdbcType=VARCHAR}
+</select>
+
+<!-- 按钮列表 -->
+<select id="queryListByAll"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	from sys_btn
+	where 1 = 1
+</select>
+
+<!-- 按钮 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from sys_btn
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询按钮列表 -->
+<select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
+	select * from (
+	select btn_id,btn_name,btn_chs_name,btn_level,@rownum:=@rownum+1 as row_num
+	from sys_btn a, (select @rownum:=0) b
+	<include refid="Example_Where_Clause"/>
+    ) c
+    where 1 = 1
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+<!-- 查询按钮列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from sys_btn 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+</mapper>   
