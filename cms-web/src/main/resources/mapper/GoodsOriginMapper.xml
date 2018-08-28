@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cms.dao.GoodsOriginDao" >
+  <resultMap id="BaseResultMap" type="com.cms.entity.GoodsOrigin" >
+    <id column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="goods_type" property="goodsType" jdbcType="INTEGER" />
+    <result column="goods_origin" property="goodsOrigin" jdbcType="VARCHAR" />
+    <result column="goods_standard" property="goodsStandard" jdbcType="VARCHAR" />
+    <result column="purchase_type" property="purchaseType" jdbcType="INTEGER" />
+    <result column="goods_storage" property="goodsStorage" jdbcType="VARCHAR" />
+    <result column="storage_type" property="storageType" jdbcType="VARCHAR" />
+    <result column="goods_image" property="goodsImage" jdbcType="VARCHAR" />
+    <result column="goods_desc" property="goodsDesc" jdbcType="VARCHAR" />
+    <result column="expiry_date" property="expiryDate" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="value" property="value" jdbcType="VARCHAR"/>
+  </resultMap>
+  <resultMap id="GoodsTypeMap" type="com.cms.entity.GoodsOriginType">
+  	<id column="type_id" property="typeId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="queryGoodsOriginType" resultMap="GoodsTypeMap" parameterType="Object">
+  	 select * from md_goods_origin_type
+  </select>
+  <select id="queryById" resultMap="BaseResultMap" parameterType="Object">
+  	 SELECT
+		a.goods_id,
+		a.goods_name,
+		a.goods_type,
+		a.goods_origin,
+		a.goods_standard,
+		a.purchase_type,
+		a.goods_storage,
+		a.storage_type,
+		a.goods_image,
+		a.goods_desc,
+		a.expiry_date,
+		a.STATUS,
+		a.create_date,
+		a.update_date,
+		b.`name`,
+		c.`value`,
+		d.`value` purchaseTypeName
+	FROM
+		md_goods_origin a
+	INNER JOIN md_goods_origin_type b  ON a.goods_type = b.type_id
+	INNER JOIN md_data_dictionary c ON c.code_id=a.storage_type AND c.type='storageType'
+	INNER JOIN md_data_dictionary d ON d.code_id = a.purchase_type AND d.type = 'purchaseType'
+	where goods_id=#{goodsId}
+  </select>
+  <select id="queryByPageList" resultMap="BaseResultMap" parameterType="Object" >
+    SELECT
+		a.goods_id,
+		a.goods_name,
+		a.goods_type,
+		a.goods_origin,
+		a.goods_standard,
+		a.purchase_type,
+		a.goods_storage,
+		a.storage_type,
+		a.goods_image,
+		a.goods_desc,
+		a.expiry_date,
+		a.STATUS,
+		a.create_date,
+		a.update_date,
+		b.`name`,
+		c.`value`,
+		d.`value` purchaseTypeName
+	FROM
+		md_goods_origin a
+	INNER JOIN md_goods_origin_type b  ON a.goods_type = b.type_id
+	INNER JOIN md_data_dictionary c ON c.code_id=a.storage_type AND c.type='storageType'
+	INNER JOIN md_data_dictionary d ON d.code_id = a.purchase_type AND d.type = 'purchaseType'
+	where a.status!=9
+    <if test='condition.goodsId != null and condition.goodsId != ""'>
+    	and a.goods_id=#{condition.goodsId}
+    </if>
+    <if test='condition.goodsName != null and condition.goodsName != ""'>
+    	and a.goods_name like CONCAT('%','${condition.goodsName}','%')
+    </if>
+    <if test='condition.status != null'>
+   		 and a.status=#{condition.status}
+    </if>
+    <if test='condition.goodsType != null and condition.goodsType != ""'>
+   		 and a.goods_type=#{condition.goodsType}
+    </if>
+    order by goods_id desc
+    <if test="limit != null and limit != ''" >
+		${limit}
+	</if>
+  </select>
+  <select id="queryByCount" resultType="int" parameterType="Object" >
+  	SELECT
+		count(*)
+	FROM
+		md_goods_origin a
+	INNER JOIN md_goods_origin_type b  ON a.goods_type = b.type_id
+	INNER JOIN md_data_dictionary c ON c.code_id=a.storage_type AND c.type='storageType'
+	INNER JOIN md_data_dictionary d ON d.code_id = a.purchase_type AND d.type = 'purchaseType'
+	where 1=1
+    <if test='condition.goodsId != null and condition.goodsId != ""'>
+    	and a.goods_id=#{condition.goodsId}
+    </if>
+    <if test='condition.goodsName != null and condition.goodsName != ""'>
+    	and a.goods_name like CONCAT('%','${condition.goodsName}','%')
+    </if>
+    <if test='condition.status != null'>
+   		 and a.status=#{condition.status}
+    </if>
+    <if test='condition.goodsType != null and condition.goodsType != ""'>
+   		 and a.goods_type=#{condition.goodsType}
+    </if>
+    order by goods_id
+  </select>
+  
+  <delete id="delete" parameterType="Object" >
+    delete from md_goods_origin
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="Object" >
+    insert into md_goods_origin
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="goodsType != null" >
+        goods_type,
+      </if>
+      <if test="goodsOrigin != null" >
+        goods_origin,
+      </if>
+      <if test="goodsStandard != null" >
+        goods_standard,
+      </if>
+      <if test="purchaseType != null" >
+        purchase_type,
+      </if>
+      <if test="goodsStorage != null" >
+        goods_storage,
+      </if>
+      <if test="storageType != null" >
+        storage_type,
+      </if>
+      <if test="goodsImage != null" >
+        goods_image,
+      </if>
+      <if test="goodsDesc != null" >
+        goods_desc,
+      </if>
+      <if test="expiryDate != null" >
+        expiry_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsType != null" >
+        #{goodsType,jdbcType=INTEGER},
+      </if>
+      <if test="goodsOrigin != null" >
+        #{goodsOrigin,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsStandard != null" >
+        #{goodsStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseType != null" >
+        #{purchaseType,jdbcType=INTEGER},
+      </if>
+      <if test="goodsStorage != null" >
+        #{goodsStorage,jdbcType=VARCHAR},
+      </if>
+      <if test="storageType != null" >
+        #{storageType,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsImage != null" >
+        #{goodsImage,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsDesc != null" >
+        #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="expiryDate != null" >
+        #{expiryDate,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="Object" >
+    update md_goods_origin
+    <set >
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsType != null" >
+        goods_type = #{goodsType,jdbcType=INTEGER},
+      </if>
+      <if test="goodsOrigin != null" >
+        goods_origin = #{goodsOrigin,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsStandard != null" >
+        goods_standard = #{goodsStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseType != null" >
+        purchase_type = #{purchaseType,jdbcType=INTEGER},
+      </if>
+      <if test="goodsStorage != null" >
+        goods_storage = #{goodsStorage,jdbcType=VARCHAR},
+      </if>
+      <if test="storageType != null" >
+        storage_type = #{storageType,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsImage != null" >
+        goods_image = #{goodsImage,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsDesc != null" >
+        goods_desc = #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="expiryDate != null" >
+        expiry_date = #{expiryDate,jdbcType=VARCHAR},
+      </if>
+       <if test="expiryDate == null" >
+        expiry_date = null,
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+</mapper>
