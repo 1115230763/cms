@@ -12,6 +12,7 @@
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/bootstrap/js/bootstrap.min.js"/>"></script>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/bootstrap/js/bootstrap-table.js"/>"></script>
 <script charset="UTF-8" type="text/javascript" src="<c:url value="/js/bootstrap/js/bootstrap-table-zh-CN.js"/>"></script>
+<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/bootstrap/js/bootstrap-treeview.js"/>"></script>
 
 
 
@@ -19,6 +20,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href='<c:url value="/css/toastr.min.css"/>'>
 <link rel="stylesheet" type="text/css" media="screen" href='<c:url value="/js/bootstrap/css/bootstrap.min.css"/>'>
 <link rel="stylesheet" type="text/css" media="screen" href='<c:url value="/js/bootstrap/css/bootstrap-table.css"/>'>
+<link rel="stylesheet" type="text/css" media="screen" href='<c:url value="/js/bootstrap/css/bootstrap-treeview.css"/>'>
 
 
 <style type="text/css">
@@ -121,7 +123,7 @@
       <div class="col-sm-2">
          <input type="text" class="form-control" id="firstname" 
             placeholder="请输入">
-      </div> 
+      </div> >
       <label for="lastname" class="col-sm-2 control-label">存储方式：</label>
       <div class="col-sm-2">
          <input type="text" class="form-control" id="lastname" 
@@ -173,7 +175,7 @@
       <div class="col-sm-1">
          <input type="text" class="form-control" id="firstname" 
             placeholder="请输入">
-      </div>
+      </div>>
    </div>
 </div>
 </form>

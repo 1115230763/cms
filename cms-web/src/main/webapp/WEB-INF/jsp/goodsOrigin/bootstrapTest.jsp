@@ -3,84 +3,223 @@
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
 <!DOCTYPE html>
 <html>
-<head> 
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>通用增删改查</title>
 
+	<link href="resources/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="resources/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+	<link href="resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
+	<link href="resources/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+	<link href="resources/plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
+	<link href="resources/plugins/select2/css/select2.min.css" rel="stylesheet"/>
 
-<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/jquery/jquery.min.js"/>"></script>
-<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/toastr.min.js"/>"></script>
-<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/Ewin.js"/>"></script>
-<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/bootstrap/js/bootstrap.min.js"/>"></script>
-<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/bootstrap/js/bootstrap-table.js"/>"></script>
-<script charset="UTF-8" type="text/javascript" src="<c:url value="/js/bootstrap/js/bootstrap-table-zh-CN.js"/>"></script>
+	<link href="resources/css/common.css" rel="stylesheet"/>
+	
+<style type="text/css">
+	*{ font-family:"宋体"}
+	.clearFile {
+        position: relative;
+        display: block;
+        text-indent: 0;
+        float: left;
+        margin-top: 70px;
+        margin-left: 20px;
+        border-radius: 5px;
+        width: 80px;
+        color: #ffffff;
+        background: #1b94ff;
+        text-decoration: none;
+        line-height: 30px;
+        text-align: center;
+        height: 30px;
+    }
 
+    .clearFile:hover {
+        text-decoration: none;
+        background: #6a96df;
+        color: white;
+    }
 
+    .file {
+        position: relative;
+        display: block;
+        text-indent: 0;
+        float: left;
+        margin-top: 70px;
+        margin-left: 20px;
+        border-radius: 5px;
+        width: 80px;
+        color: #ffffff;
+        background: #1b94ff;
+        text-decoration: none;
+        line-height: 30px;
+        text-align: center;
+        height: 30px;
+    }
 
+    .file:hover {
+        text-decoration: none;
+        background: #6a96df;
+        color: white;
+    }
 
-<link rel="stylesheet" type="text/css" media="screen" href='<c:url value="/css/toastr.min.css"/>'>
-<link rel="stylesheet" type="text/css" media="screen" href='<c:url value="/js/bootstrap/css/bootstrap.min.css"/>'>
-<link rel="stylesheet" type="text/css" media="screen" href='<c:url value="/js/bootstrap/css/bootstrap-table.css"/>'>
-<script type="text/javascript" src="js/Ewin.js"></script>
+    .file input {
+        position: absolute;
+        width: 183px;
+        height: 48px;
+        right: 0px;
+        top: 0;
+        opacity: 0;
+    }
 
-
-
+    .sfzimg {
+        width: 100px;
+        height: 100px;
+        float: left;
+        padding: 1px;
+        display: block;
+        border-radius: 5px;
+        border: 2px solid #48aada;
+    }
+</style>
 </head>
-<script type="text/javascript">
+<body>
+<div id="main">
+	<div id="toolbar">
+		<a class="waves-effect waves-button" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增用户</a>
+		<a class="waves-effect waves-button" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑用户</a>
+		<a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除用户</a>
+	</div>
+	<table id="table"></table>
+</div>
+<!-- 新增 -->
+<div id="createDialog" class="crudDialog"   hidden>
+	<form>
+	<div class="container" >
+	<div class="form-group col-sm-8">
+      <label for="firstname" >商品名称：</label>
+         <input type="text" class="form-control" id="firstname">
+    </div>
+    <div class="form-group col-sm-4">
+      <label for="lastname" >商品品类：</label>
+         <input type="text" class="form-control" id="lastname">
+   </div>
+   <div class="form-group col-sm-4">
+      <label for="firstname">产地：</label>
+         <input type="text" class="form-control" id="firstname" >
+    </div>
+    <div class="form-group col-sm-4">
+      <label for="lastname" >规格：</label>
+         <input type="text" class="form-control" id="lastname" > 
+   </div>
+   <div class="form-group col-sm-4">
+      <label for="firstname col-sm-4" >采购类型：</label>
+         <input type="text" class="form-control" id="firstname">
+   </div>
+    <div class="form-group col-sm-4">
+      <label for="lastname" >存储方式：</label>
+         <input type="text" class="form-control" id="lastname" > 
+    </div>
+    <div class="form-group col-sm-4">
+      <label for="lastname" >存储类型：</label>
+         <input type="text" class="form-control" id="lastname" > 
+   </div> 
+   <div class="form-group col-sm-12" style='padding: 0px;'>
+   <div class='col-sm-1'><label>缩减图:</label></div>
+   <div class='col-sm-11'>
+         <div id="imgFile" class="sfzimg"></div>
+			<div class="images"> 
+				<a href="javascript:;" class="file">选择图片
+				<input type="file" name="goodsImageFile" id="fileImg"
+					onchange="upload('imgFile','goodsImage','goodsOriginController.do?upload')">
+					<input type="hidden" id="goodsImage" name="goodsImage"/>
+				</a>
+			</div>
+			<a href="javascript:;" class='clearFile' onclick="clearFile('imgFile','goodsImage')" >清空图片</a> 
+	</div>
+   </div>
+   <div class="form-group col-sm-12">
+      <label for="firstname" >商品描述：</label>
+      <input type="text" class="form-control" id="firstname"> 
+   </div>
+    <div class="form-group col-sm-12" style='padding: 0px;'>
+       <div class='col-sm-2'><label for="firstname" >保质期：</label></div>
+      <div class='col-sm-2'><label for="firstname" >天数</label><input type="text" class="form-control" id="firstname"> </div>
+      <div class='col-sm-2'><label for="firstname" >单位</label><select><option value='天'>天</option><option value='年'>月</option><option value='月'>年</option></select></div>
+   </div>
+   </div>
+	</form>
+</div>
+<script src="resources/plugins/jquery.1.12.4.min.js"></script>
+<script src="resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+<script src="resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.js"></script>
+<script src="resources/plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="resources/plugins/waves-0.7.5/waves.min.js"></script>
+<script src="resources/plugins/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="resources/plugins/select2/js/select2.min.js"></script>
 
-
-$(function () {
-    //1.初始化Table
-    var oTable = new TableInit();
-    oTable.Init();
-
-    //2.初始化Button的点击事件
-    var oButtonInit = new ButtonInit();
-    oButtonInit.Init();
-});
-var TableInit = function () {
-    var oTableInit = new Object();
-    //初始化Table
-    oTableInit.Init = function () {
-        $('#tb_departments').bootstrapTable({
-            url: '<c:url value="/goodsOriginController.do?showDatagrid"/>',         //请求后台的URL（*）
-            method: 'get',                      //请求方式（*）
-            toolbar: '#toolbar',                //工具按钮用哪个容器
-            striped: true,                      //是否显示行间隔色
-            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-            pagination: true,                   //是否显示分页（*）
-            sortable: false,                     //是否启用排序
-            sortOrder: "asc",                   //排序方式
-            queryParams: oTableInit.queryParams,//传递参数（*）
-            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-            pageNumber:1,                       //初始化加载第一页，默认第一页
-            pageSize: 10,                       //每页的记录行数（*）
-            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-            search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-            strictSearch: true,
-            showColumns: true,                  //是否显示所有的列
-            showRefresh: true,                  //是否显示刷新按钮
-            minimumCountColumns: 2,             //最少允许的列数
-            clickToSelect: true,                //是否启用点击选中行
-            height: 660,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-            uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
-            //showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
-            cardView: false,                    //是否显示详细视图
-            detailView: false,                   //是否显示父子表
-            columns: [{checkbox: true,}, 
-          			{field: 'goodsId',		title: '商品编码',	width: 20 , halign: 'center',align: 'center' },
-          			{field: 'goodsName',		title: '商品名称',	width: 57 , halign: 'center',align: 'left' },
-          			{field: 'name',		title: '商品品类',	width: 20 , halign: 'center',align: 'left' },
-          			{field: 'goodsImage',		title: '图片',	width: 20 , halign: 'center',align: 'center',
+<script src="resources/js/common.js"></script>
+<script>
+var $table = $('#table');
+$(function() {
+	$(document).on('focus', 'input[type="text"]', function() {
+		$(this).parent().find('label').addClass('active');
+	}).on('blur', 'input[type="text"]', function() {
+		if ($(this).val() == '') {
+			$(this).parent().find('label').removeClass('active');
+		}
+	});
+ 
+	// bootstrap table初始化
+	// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
+	$table.bootstrapTable({
+		url: '<c:url value="/goodsOriginController.do?showDatagrid"/>',
+		height: getHeight(),
+		striped: true,
+		search: true,
+		searchOnEnterKey: true,
+		showRefresh: true,
+		showToggle: true,
+		showColumns: true,
+		minimumCountColumns: 2,
+		showPaginationSwitch: true,
+		clickToSelect: true,
+		detailView: true,
+		detailFormatter: 'detailFormatter',
+		pagination: true,
+		paginationLoop: false,
+		classes: 'table table-hover table-no-bordered',
+		sidePagination: 'server',
+		silentSort: false,
+		smartDisplay: false,
+		idField: 'id',
+		sortName: 'id',
+		sortOrder: 'desc',
+		escape: true,
+		searchOnEnterKey: true,
+		idField: 'systemId',
+		maintainSelected: true,
+		toolbar: '#toolbar',
+		columns: [
+			{checkbox: true,}, 
+          			{field: 'goodsId',		title: '商品编码',	  halign: 'center',align: 'center' },
+          			{field: 'goodsName',		title: '商品名称',	  halign: 'center',align: 'center' },
+          			{field: 'name',		title: '商品品类',   halign: 'center',align: 'center' },
+          			{field: 'goodsImage',		title: '图片',  halign: 'center',align: 'center',
           				formatter:function(value,rowData,rowIndex){
           					if(value != ""){
-          						return "<img width='60' height='60' src='"+value+"'>";
+          						return " ";
           					}else {
           						return "";
           					}
           					}},
-          			{field: 'goodsStandard',		title: '原子规格',	width: 20 , halign: 'center',align: 'left' },
-          			{field: 'value',		title: '存储类型',	width: 20 , halign: 'center',align: 'left' },
-          			{field: 'purchaseTypeName',		title: '采购类型',	width: 20 , halign: 'center',align: 'left' },
-          			{field: 'status',		title: '状态',	width: 10 , halign: 'center',align: 'center',
+          			{field: 'goodsStandard',		title: '原子规格',	  halign: 'center',align: 'center' },
+          			{field: 'value',		title: '存储类型',	  halign: 'center',align: 'center' },
+          			{field: 'purchaseTypeName',		title: '采购类型',	 halign: 'center',align: 'center' },
+          			{field: 'status',		title: '状态',	  halign: 'center',align: 'center',
           				formatter:function(value,rowData,rowIndex){
           					if(value == 0){
           						return "有效";
@@ -92,199 +231,153 @@ var TableInit = function () {
           						return "";
           					}
           				}
-                        }
-                      ]
-        });
-    };
-
-    //得到查询的参数
-    oTableInit.queryParams = function (params) {
-        var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
-            limit: params.limit,   //页面大小
-            offset: params.offset,  //页码
-            departmentname: $("#txt_search_departmentname").val(),
-            statu: $("#txt_search_statu").val()
-        };
-        return temp;
-    };
-    return oTableInit;
-};
+                        },
+			{field: 'action', title: '操作', halign: 'center', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
+		]
+	}).on('all.bs.table', function (e, name, args) {
+		$('[data-toggle="tooltip"]').tooltip();
+		$('[data-toggle="popover"]').popover();  
+	});
+}); 
+ 
 
 
 
-function modelOpen(width,title,url){
-	document.getElementById('modalDialog').style.width=parseInt(width)+'px'; 
-	 $("#myModalLabel").text(title);
-	 $('#commonModalbody').load(url);
-     $('#myModal').modal(); 
+
+
+
+function actionFormatter(value, row, index) {
+    return [
+        '<a class="like" href="javascript:void(0)" data-toggle="tooltip" title="Like"><i class="glyphicon glyphicon-heart"></i></a>　',
+        '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
+        '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
+    ].join('');
 }
 
-var ButtonInit = function () {
-    var oInit = new Object();
-    var postdata = {};
-
-    oInit.Init = function () {
-        //初始化页面上面的按钮事件
-    	$("#btn_add").click(function () {
-            
-    		modelOpen('1300','新增原子商品','goodsOriginController.do?bootstrapTestInfo');
-            
-            postdata.DEPARTMENT_ID = "";
-        });
-
-        $("#btn_edit").click(function () {
-            var arrselections = $("#tb_departments").bootstrapTable('getSelections');
-            if (arrselections.length > 1) {
-                toastr.warning('只能选择一行进行编辑');
-                return;
-            }
-            if (arrselections.length <= 0) {
-                toastr.warning('请选择有效数据');
-
-                return;
-            }
-            $("#myModalLabel").text("编辑");
-            $("#txt_departmentname").val(arrselections[0].DEPARTMENT_NAME);
-            $("#txt_parentdepartment").val(arrselections[0].PARENT_ID);
-            $("#txt_departmentlevel").val(arrselections[0].DEPARTMENT_LEVEL);
-            $("#txt_statu").val(arrselections[0].STATUS);
-
-            postdata.DEPARTMENT_ID = arrselections[0].DEPARTMENT_ID;
-            $('#myModal').modal();
-        });
-
-        $("#btn_delete").click(function () {
-            var arrselections = $("#tb_departments").bootstrapTable('getSelections');
-            if (arrselections.length <= 0) {
-                toastr.warning('请选择有效数据');
-                return;
-            }
-
-            Ewin.confirm({ message: "确认要删除选择的数据吗？" }).on(function (e) {
-                if (!e) {
-                    return;
-                }
-                $.ajax({
-                    type: "post",
-                    url: "/Home/Delete",
-                    data: { "": JSON.stringify(arrselections) },
-                    success: function (data, status) {
-                        if (status == "success") {
-                            toastr.success('提交数据成功');
-                            $("#tb_departments").bootstrapTable('refresh');
-                        }
-                    },
-                    error: function () {
-                        toastr.error('Error');
-                    },
-                    complete: function () {
-
-                    }
-
-                });
-            });
-        });
-
-        $("#btn_submit").click(function () {
-            postdata.DEPARTMENT_NAME = $("#txt_departmentname").val();
-            postdata.PARENT_ID = $("#txt_parentdepartment").val();
-            postdata.DEPARTMENT_LEVEL = $("#txt_departmentlevel").val();
-            postdata.STATUS = $("#txt_statu").val();
-            $.ajax({
-                type: "post",
-                url: "/Home/GetEdit",
-                data: { "": JSON.stringify(postdata) },
-                success: function (data, status) {
-                    if (status == "success") {
-                        toastr.success('提交数据成功');
-                        $("#tb_departments").bootstrapTable('refresh');
-                    }
-                },
-                error: function () {
-                    toastr.error('Error');
-                },
-                complete: function () {
-
-                }
-
-            });
-        });
-
-        $("#btn_query").click(function () {
-            $("#tb_departments").bootstrapTable('refresh');
-        });
-    };
-
-    return oInit;
+window.actionEvents = {
+    'click .like': function (e, value, row, index) {
+        alert('You click like icon, row: ' + JSON.stringify(row));
+        console.log(value, row, index);
+    },
+    'click .edit': function (e, value, row, index) {
+        alert('You click edit icon, row: ' + JSON.stringify(row));
+        console.log(value, row, index);
+    },
+    'click .remove': function (e, value, row, index) {
+        alert('You click remove icon, row: ' + JSON.stringify(row));
+        console.log(value, row, index);
+    }
 };
+function detailFormatter(index, row) {
+	var html = [];
+	$.each(row, function (key, value) {
+		html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+	});
+	return html.join('');
+}
+// 新增
+function createAction() {
+	$.confirm({
+		type: 'dark',
+		animationSpeed: 800,
+		columnClass:"col-md-12",
+		title: '新增原子商品',
+		content: $('#createDialog').html(),
+		buttons: {
+			confirm: {
+				text: '确认',
+				btnClass: 'waves-effect waves-button',
+				action: function () {
+					$.alert('确认');
+				}
+			},
+			cancel: {
+				text: '取消',
+				btnClass: 'waves-effect waves-button'
+			}
+		}
+	});
+}
+// 编辑
+function updateAction() {
+	var rows = $table.bootstrapTable('getSelections');
+	if (rows.length == 0) {
+		$.confirm({
+			title: false,
+			content: '请至少选择一条记录！',
+			autoClose: 'cancel|3000',
+			backgroundDismiss: true,
+			buttons: {
+				cancel: {
+					text: '取消',
+					btnClass: 'waves-effect waves-button'
+				}
+			}
+		});
+	} else {
+		$.confirm({
+			type: 'blue',
+			animationSpeed: 300,
+			title: '编辑系统',
+			content: $('#createDialog').html(),
+			buttons: {
+				confirm: {
+					text: '确认',
+					btnClass: 'waves-effect waves-button',
+					action: function () {
+						$.alert('确认');
+					}
+				},
+				cancel: {
+					text: '取消',
+					btnClass: 'waves-effect waves-button'
+				}
+			}
+		});
+	}
+}
+// 删除
+function deleteAction() {
+	var rows = $table.bootstrapTable('getSelections');
+	if (rows.length == 0) {
+		$.confirm({
+			title: false,
+			content: '请至少选择一条记录！',
+			autoClose: 'cancel|3000',
+			backgroundDismiss: true,
+			buttons: {
+				cancel: {
+					text: '取消',
+					btnClass: 'waves-effect waves-button'
+				}
+			}
+		});
+	} else {
+		$.confirm({
+			type: 'red',
+			animationSpeed: 300,
+			title: false,
+			content: '确认删除该系统吗？',
+			buttons: {
+				confirm: {
+					text: '确认',
+					btnClass: 'waves-effect waves-button',
+					action: function () {
+						var ids = new Array();
+						for (var i in rows) {
+							ids.push(rows[i].systemId);
+						}
+						$.alert('删除：id=' + ids.join("-"));
+					}
+				},
+				cancel: {
+					text: '取消',
+					btnClass: 'waves-effect waves-button'
+				}
+			}
+		});
+	}
+}
 </script>
-
-<body> 
-
-<!-- 模态框 -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-	aria-labelledby="gridSystemModalLabel" data-backdrop="static">
-	<div class="modal-dialog" role="document" id="modalDialog" >
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close" onclick="removeFrom()">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title" id="myModalLabel">
-					
-				</h4>
-			</div>
-			<div class="modal-body" id="commonModalbody">
-				
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"  onclick="removeFrom()">
-					关闭
-				</button>
-				<button  type="button" class="btn btn-primary" id="baocun" onclick="fromSubmit()">
-					保存
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-
- <div class="panel-body" style="padding-bottom:0px;">
-        <div class="panel panel-default">
-            <div class="panel-heading">查询条件</div>
-            <div class="panel-body">
-                <form id="formSearch" class="form-horizontal">
-                    <div class="form-group" style="margin-top:15px">
-                        <label class="control-label col-sm-1" for="txt_search_departmentname">部门名称</label>
-                        <div class="col-sm-3">
-                            <input type="text" class="form-control" id="txt_search_departmentname">
-                        </div>
-                        <label class="control-label col-sm-1" for="txt_search_statu">状态</label>
-                        <div class="col-sm-3">
-                            <input type="text" class="form-control" id="txt_search_statu">
-                        </div>
-                        <div class="col-sm-4" style="text-align:left;">
-                            <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>       
-
-        <div id="toolbar" class="btn-group">
-            <button id="btn_add" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-            </button>
-            <button id="btn_edit" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
-            </button>
-            <button id="btn_delete" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
-            </button>
-        </div>
-        <table id="tb_departments"></table>
-    </div>
 </body>
 </html>
